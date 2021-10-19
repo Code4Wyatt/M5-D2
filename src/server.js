@@ -1,8 +1,12 @@
 import express from "express"
+import authorsRouter from "./services/authors/index.js"
+import authorRouter from "./services/authors"
 
 const server = express()
 
-const port = 3003
+server.use( authorRouter)
+
+const port = 3001
 
 server.listen(port, () => {
     console.log("Server running on port: ", port)
