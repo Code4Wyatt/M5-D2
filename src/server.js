@@ -9,7 +9,7 @@ const port = 3001;
 server.use(cors);
 server.use(express.json());
 console.log(listEndpoints(server));
-server.use(authorRouter);
+server.use("/authors", authorRouter);
 
 
 
@@ -20,5 +20,3 @@ server.listen(port, () => {
 server.on("error", (error) => {
     console.log("Server not running due to: ${error}")
 });
-
-export default server;
