@@ -50,8 +50,10 @@ authorRouter.get("/", async (req, res, next) => {
 
 authorRouter.get("/:id", async (req, res, next) => {
  try {
-    const fileAsBuffer = fs.readFileSync(authorsFilePath);
-    const feleAsString = fileAsBuffer.toString();
+     const fileAsBuffer = fs.readFileSync(authorsFilePath);
+     
+     const feleAsString = fileAsBuffer.toString();
+     
     const fileAsJSONArray = JSON.parse(fileAsString);
 
     const author = fileAsJSONArray.find(
@@ -72,10 +74,10 @@ authorRouter.get("/:id", async (req, res, next) => {
 
 authorRouter.put("/:id", async (req, res, next) => {
   try {
-    const fileAsBuffer = fs.readFileSync(authorsFilePath);
-
-    const fileAsString = fileAsBuffer.toString();
-
+      const fileAsBuffer = fs.readFileSync(authorsFilePath);
+      
+      const fileAsString = fileAsBuffer.toString();
+      
     let fileAsJSONArray = JSON.parse(fileAsString);
 
     const authorIndex = fileAsJSONArray.findIndex(
