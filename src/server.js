@@ -8,7 +8,7 @@ import authorRouter from "./services/authors/index.js";
 
 import blogsRouter from "./services/blogs/index.js";
 
-import { notFound, forbidden, catchAllErrorHandler, forbidden } from "./errorHandlers.js";
+import { notFound, forbidden, catchAllErrorHandler } from "./errorHandlers.js";
 
 const server = express();
 
@@ -38,14 +38,6 @@ server.on("error", (error) => {
     console.log("Server not running due to: ${error}")
 });
 
-server.get('/middleware', (req, res, next) => {
-    const { number } = req.query;
-    let number = parseInt(number);
-    req.number = number;
-    next();
-}, (req, res, next) => {
-    req.number++;
-    next();
-})
+
 
 

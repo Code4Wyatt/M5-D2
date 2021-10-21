@@ -20,15 +20,10 @@ const blogsRouter = express.Router();
 
 blogsRouter.post("/", checkBlogPostSchema, checkValidationResult, async (req, res, next) => {
   try {
-    const { title, category, content, dateOfBirth } = req.body;
-    const author = {
+    
+    const blog = {
       id: uniqid(),
        ...req.body,
-      name,
-      surname,
-      email,
-      dateOfBirth,
-      avatar: `https://ui-avatars.com/api/?name=${name}+${surname}`,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

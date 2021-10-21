@@ -4,16 +4,16 @@ const schema = {
     title: {
         in: ['body'],
         isString: {
-            errorMessage: 'validation failed, type must be string'
+            errorMessage: 'title validation failed, type must be string'
         }
     },
     category: {in: ['body'],
         isString: {
-            errorMessage: 'validation failed, type must be string'
+            errorMessage: 'category validation failed, type must be string'
         }},
     content: {in: ['body'],
         isString: {
-            errorMessage: 'validation failed, type must be string'
+            errorMessage: 'content validation failed, type must be string'
         }},
     "author.name": {in: ['body'],
         isString: {
