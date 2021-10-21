@@ -14,3 +14,9 @@ const notFound = (err, req, res, next) => {
     }
     next();
 };
+
+const forbidden = (err, req, res, next) => {
+    if (err && err.status === 400) {
+        res.status(403).send({ message: err.message || "Forbidden" });
+ }
+}
