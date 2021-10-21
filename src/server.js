@@ -18,8 +18,6 @@ server.use(cors());
 
 server.use(express.json());
 
-console.log(listEndpoints(server));
-
 server.use("/authors", authorRouter);
 
 server.use("/blogs", blogsRouter);
@@ -29,6 +27,8 @@ server.use(notFound);
 server.use(forbidden);
 
 server.use(catchAllErrorHandler);
+
+console.log(listEndpoints(server));
 
 server.listen(port, () => {
     console.log("Server running on port: ", port)

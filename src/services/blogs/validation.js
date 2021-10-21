@@ -4,36 +4,36 @@ const schema = {
     title: {
         in: ['body'],
         isString: {
-            errorMessage: 'title validation failed, type must be string'
+            errorMessage: 'title validation failed, type must be string',
         }
     },
     category: {in: ['body'],
         isString: {
-            errorMessage: 'category validation failed, type must be string'
+            errorMessage: 'category validation failed, type must be string',
         }},
     content: {in: ['body'],
         isString: {
-            errorMessage: 'content validation failed, type must be string'
+            errorMessage: 'content validation failed, type must be string',
         }},
     "author.name": {in: ['body'],
         isString: {
-            errorMessage: 'author.name validation failed, type must be string'
+            errorMessage: 'author.name validation failed, type must be string',
         }},
     "author.avatar": {in: ['body'],
         isString: {
-            errorMessage: 'author.avatar validation failed, type must be string'
+            errorMessage: 'author.avatar validation failed, type must be string',
         }},
     "readTime.value": {in: ['body'],
-        isString: {
-            errorMessage: 'readTime.value validation failed, type must be numeric'
+        isNumeric: {
+            errorMessage: 'readTime.value validation failed, type must be numeric',
         }},
     "readTime.unit": {in: ['body'],
         isString: {
-            errorMessage: 'readTime.value validation failed, type must be string'
+            errorMessage: 'readTime.value validation failed, type must be string',
         }},
     cover: {in: ['body'],
         isString: {
-            errorMessage: 'validation failed, type must be string'
+            errorMessage: 'validation failed, type must be string',
         }},
 }
 
