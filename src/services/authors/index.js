@@ -4,6 +4,7 @@ import uniqid from "uniqid";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const authorsFilePath = path.join(__dirname, "authors.json");
@@ -14,6 +15,7 @@ authorRouter.post("/", async (req, res, next) => {
     const { name, surname, email, dateOfBirth } = req.body;
     const author = {
       id: uniqid(),
+     
       name,
       surname,
       email,
