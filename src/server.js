@@ -6,10 +6,20 @@ import authorRouter from "./services/authors/index.js";
 const server = express();
 const port = 3001;
 
-server.use(cors);
+server.use(cors());
 server.use(express.json());
 console.log(listEndpoints(server));
 server.use("/authors", authorRouter);
+
+server.get('/middleware', (req, res, next) => {
+    const { number } = req.query;
+    let number = parseInt(number);
+    req.number = number;
+    next();
+}, (req, res, next) => {
+    req.number++;
+    next();
+})
 
 
 

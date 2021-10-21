@@ -85,7 +85,7 @@ authorRouter.put("/:id", async (req, res, next) => {
     );
     if (!authorIndex == -1) {
         res
-            .status(404)
+        .status(404)
         .send({ message: `Author with ${req.params.id} is not found!` });
     }
     const previousAuthorData = fileAsJSONArray[authorIndex];
