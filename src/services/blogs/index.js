@@ -8,7 +8,7 @@ import path, { dirname } from "path";
 
 import { fileURLToPath } from "url";
 
-import { checkBlogPostSchema, checkValidationResult } from "./validation.js";
+import { checkBlogPostSchema, checkSearchSchema, checkValidationResult } from "./validation.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -77,6 +77,20 @@ blogsRouter.get("/:id", async (req, res, next) => {
     }
 
     res.send(author);
+  } catch (error) {
+    res.send(500).send({ message: error.message });
+  }
+});
+
+blogsRouter.get("/search",checkSearchSchema, checkValidationResult, async (req, res, next) => {
+  try {
+    const { title } = req.query;
+    const fileAsBuffer = fs.readFileSync(authorsFilePath);
+    const fileAsString = fileAsBuffer.toString();
+    const fileAsJSON = JSON.parse(fileAsString);
+    const array = JSON.parse(fileAsString);
+    const filtered = array.filter(blog => blog.title.toLowerCase().includes(title.toLowerCase()));
+    res.send(fileAsJSON);
   } catch (error) {
     res.send(500).send({ message: error.message });
   }
