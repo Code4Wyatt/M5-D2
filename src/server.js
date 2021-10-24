@@ -10,6 +10,14 @@ import blogsRouter from "./services/blogs/index.js";
 
 import { notFound, forbidden, catchAllErrorHandler } from "./errorHandlers.js";
 
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = dirname(__filename);
+
+const publicDirectory = path.join(__dirname, "../public");
+
 const server = express();
 
 const port = 3001;
@@ -17,6 +25,8 @@ const port = 3001;
 server.use(cors());
 
 server.use(express.json());
+
+server.use(expres.static(publicDirectory));
 
 server.use("/authors", authorRouter);
 
