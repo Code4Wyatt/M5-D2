@@ -1,21 +1,42 @@
 import express from "express";
+
 import fs from "fs";
+
 import uniqid from "uniqid";
+
 import path, { dirname } from "path";
+
 import { fileURLToPath } from "url";
+
 import { parseFile, uploadFile } from "../utils/upload/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const authorsFilePath = path.join(__dirname, "authors.json");
-const authorRouter = express.Router();
 
-authorRouter.post("/", async (req, res, next) => {
+const __dirname = dirname(__filename);
+
+const authorsFilePath = path.join(__dirname, "authors.json");
+
+const authorsRouter = express.Router();
+
+// get all authors
+authorsRouter.get("/", async (req, res, next) => {
+  try {
+    const fileAsBuffer = fs.readFileSync(authorsFilePath);
+    const fileAsString = fileAsBuffer.toString();
+    const fileAsJSON = JSON.parse(fileAsString);
+    res.send(fileAsJSON);
+  } catch (error) {
+    res.send(500).send({ message: error.message });
+  }
+});
+
+// create  author
+authorsRouter.post("/", async (req, res, next) => {
   try {
     const { name, surname, email, dateOfBirth } = req.body;
+
     const author = {
       id: uniqid(),
-
       name,
       surname,
       email,
@@ -26,7 +47,9 @@ authorRouter.post("/", async (req, res, next) => {
     };
 
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
+
     const fileAsString = fileAsBuffer.toString();
+
     const fileAsJSONArray = JSON.parse(fileAsString);
 
     fileAsJSONArray.push(author);
@@ -39,22 +62,12 @@ authorRouter.post("/", async (req, res, next) => {
   }
 });
 
-authorRouter.get("/", async (req, res, next) => {
+// get single authors
+authorsRouter.get("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
+
     const fileAsString = fileAsBuffer.toString();
-    const fileAsJSON = JSON.parse(fileAsString);
-    res.send(fileAsJSON);
-  } catch (error) {
-    res.send(500).send({ message: error.message });
-  }
-});
-
-authorRouter.get("/:id", async (req, res, next) => {
-  try {
-    const fileAsBuffer = fs.readFileSync(authorsFilePath);
-
-    const feleAsString = fileAsBuffer.toString();
 
     const fileAsJSONArray = JSON.parse(fileAsString);
 
@@ -66,14 +79,41 @@ authorRouter.get("/:id", async (req, res, next) => {
         .status(404)
         .send({ message: `Author with ${req.params.id} is not found!` });
     }
-
     res.send(author);
   } catch (error) {
     res.send(500).send({ message: error.message });
   }
 });
 
-authorRouter.put("/:id", async (req, res, next) => {
+// delete  author
+authorsRouter.delete("/:id", async (req, res, next) => {
+  try {
+    const fileAsBuffer = fs.readFileSync(authorsFilePath);
+
+    const fileAsString = fileAsBuffer.toString();
+
+    let fileAsJSONArray = JSON.parse(fileAsString);
+
+    const author = fileAsJSONArray.find(
+      (author) => author.id === req.params.id
+    );
+    if (!author) {
+      res
+        .status(404)
+        .send({ message: `Author with ${req.params.id} is not found!` });
+    }
+    fileAsJSONArray = fileAsJSONArray.filter(
+      (author) => author.id !== req.params.id
+    );
+    fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
+    res.status(204).send();
+  } catch (error) {
+    res.send(500).send({ message: error.message });
+  }
+});
+
+//  update author
+authorsRouter.put("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
 
@@ -105,7 +145,7 @@ authorRouter.put("/:id", async (req, res, next) => {
   }
 });
 
-authorRouter.put(
+authorsRouter.put(
   "/:id/avatar",
   parseFile.single("avatar"),
   uploadFile,
@@ -128,12 +168,11 @@ authorRouter.put(
       const previousAuthorData = fileAsJSONArray[authorIndex];
       const changedAuthor = {
         ...previousAuthorData,
-        ...req.body,
+        avatar: req.file,
         updatedAt: new Date(),
         id: req.params.id,
       };
       fileAsJSONArray[authorIndex] = changedAuthor;
-
       fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
       res.send(changedAuthor);
     } catch (error) {
@@ -141,30 +180,5 @@ authorRouter.put(
     }
   }
 );
-authorRouter.delete("/:id", async (req, res, next) => {
-  try {
-    const fileAsBuffer = fs.readFileSync(authorsFilePath);
 
-    const fileAsString = fileAsBuffer.toString();
-
-    let fileAsJSONArray = JSON.parse(fileAsString);
-
-    const author = fileAsJSONArray.find(
-      (author) => author.id === req.params.id
-    );
-    if (!author) {
-      res
-        .status(404)
-        .send({ message: `Author with ${req.params.id} is not found!` });
-    }
-    fileAsJSONArray = fileAsJSONArray.filter(
-      (author) => author.id !== req.params.id
-    );
-    fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
-    res.status(204).send();
-  } catch (error) {
-    res.send(500).send({ message: error.message });
-  }
-});
-
-export default authorRouter;
+export default authorsRouter;
