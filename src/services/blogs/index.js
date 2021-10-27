@@ -7,6 +7,7 @@ import uniqid from "uniqid";
 import path, { dirname } from "path";
 
 import { fileURLToPath } from "url";
+
 import { parseFile, uploadFile } from "../../utils/upload/index.js";
 
 import {
@@ -16,11 +17,11 @@ import {
   checkValidationResult,
 } from "./validation.js";
 
+import { blogsFilePath } from "../../utils/upload/index.js";
+
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = dirname(__filename);
-
-const blogsFilePath = path.join(__dirname, "blogs.json");
 
 const blogsRouter = express.Router();
 
@@ -187,6 +188,48 @@ blogsRouter.put("/:id", async (req, res, next) => {
     res.send(500).send({ message: error.message });
   }
 });
+
+blogsRouter.post(
+  "/:id/comment",
+  checkCommentSchema,
+  checkValidationResult,
+  async (req, res, next) => {
+    try {
+      const { text, userName } = req.body;
+      const comment = { id: uniqid(), text, userName, createdAt: new Date() };
+      const fileAsBuffer = fs.readFileSync(blogsFilePath);
+
+      const fileAsString = fileAsBuffer.toString();
+
+      let fileAsJSONArray = JSON.parse(fileAsString);
+
+      const blogIndex = fileAsJSONArray.findIndex(
+        (blog) => blog.id === req.params.id
+      );
+      if (!blogIndex == -1) {
+        res
+          .status(404)
+          .send({ message: `blog with ${req.params.id} is not found!` });
+      }
+      const previousblogData = fileAsJSONArray[blogIndex];
+      previousblogData.comments = previousblogData.comments || [];
+      const changedblog = {
+        ...previousblogData,
+        ...req.body,
+        comments: [...previousblogData.comments, comment],
+        updatedAt: new Date(),
+        id: req.params.id,
+      };
+      fileAsJSONArray[blogIndex] = changedblog;
+
+      fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
+      res.send(changedblog);
+    } catch (error) {
+      console.log(error);
+      res.send(500).send({ message: error.message });
+    }
+  }
+);
 
 blogsRouter.put(
   "/:id/comment",

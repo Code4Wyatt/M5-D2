@@ -10,11 +10,13 @@ import { fileURLToPath } from "url";
 
 import { parseFile, uploadFile } from "../../utils/upload/index.js";
 
+import {authorsFilePath} from "../../utils/upload/index.js";
+
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = dirname(__filename);
 
-const authorsFilePath = path.join(__dirname, "authors.json");
+
 
 const authorsRouter = express.Router();
 
@@ -147,8 +149,8 @@ authorsRouter.put("/:id", async (req, res, next) => {
 
 authorsRouter.put(
   "/:id/avatar",
-  parseFile.single("avatar"),
-  uploadFile,
+  parseFile.single("avatar"), // parse/analyse single file titled avatar
+  uploadFile, // upload the file
   async (req, res, next) => {
     try {
       const fileAsBuffer = fs.readFileSync(authorsFilePath);
