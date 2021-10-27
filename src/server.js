@@ -22,7 +22,7 @@ const __dirname = dirname(__filename);
 
 const publicDirectory = path.join(__dirname, "../public");
 
-const whitelist = [process.env.FE_LOCAL_URL, process.env.REACT_APP_FE_PROD_URL];
+const whitelist = [process.env.FE_LOCAL_URL, process.env.FE_PROD_URL];
 
 const corsOptions = {
   origin: function (origin, callback) {
