@@ -39,7 +39,7 @@ const server = express();
 
 const PORT = process.env.PORT;
 
-server.use(cors({corsOptions}));
+server.use(cors(corsOptions));
 
 server.use(express.json());
 
