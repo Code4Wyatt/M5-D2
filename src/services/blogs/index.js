@@ -276,7 +276,6 @@ blogsRouter.put(
 blogsRouter.put(
   "/:id/cover",
   parseFile.single("cover"),
-  uploadFile,
   async (req, res, next) => {
     try {
       const fileAsBuffer = fs.readFileSync(blogsFilePath);
@@ -296,7 +295,7 @@ blogsRouter.put(
       const previousblogData = fileAsJSONArray[blogIndex];
       const changedblog = {
         ...previousblogData,
-        cover: req.file,
+        cover: req.file.path,
         updatedAt: new Date(),
         id: req.params.id,
       };

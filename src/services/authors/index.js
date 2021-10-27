@@ -150,9 +150,9 @@ authorsRouter.put("/:id", async (req, res, next) => {
 authorsRouter.put(
   "/:id/avatar",
   parseFile.single("avatar"), // parse/analyse single file titled avatar
-  uploadFile, // upload the file
   async (req, res, next) => {
     try {
+      res.send(req.file)
       const fileAsBuffer = fs.readFileSync(authorsFilePath);
 
       const fileAsString = fileAsBuffer.toString();
@@ -170,7 +170,7 @@ authorsRouter.put(
       const previousAuthorData = fileAsJSONArray[authorIndex];
       const changedAuthor = {
         ...previousAuthorData,
-        avatar: req.file,
+        avatar: req.file.path,
         updatedAt: new Date(),
         id: req.params.id,
       };
