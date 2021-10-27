@@ -8,7 +8,7 @@ import path, { dirname } from "path";
 
 import { fileURLToPath } from "url";
 
-import { parseFile, uploadFile } from "../utils/upload/index.js";
+import { parseFile, uploadFile } from "../../utils/upload/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
